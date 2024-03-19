@@ -62,12 +62,12 @@ var patEnvVar = {
 }
 
 var managedIdentityEnvVar = {
-  // Adding this makes the agent use Managed identity tokens instead of PAT tokens
+  // Adding this makes the agent use Managed identity tokens instead of PAT tokens if you follow the implementation described here: https://www.huuhka.net/azure-devops-agents-using-managed-identitites/
   name: 'MANAGED_IDENTITY_OBJECT_ID'
   value: userAssignedIdentity.properties.principalId
 }
 
-resource staticAgent 'Microsoft.App/containerApps@2023-05-02-preview' = {
+resource staticAgent 'Microsoft.App/containerApps@2023-05-02-preview' = { // containerApps instead of Jobs
   name: '${replace(toLower(appName), '--', '-')}-static'
   location: location
   identity: {
@@ -90,7 +90,7 @@ resource staticAgent 'Microsoft.App/containerApps@2023-05-02-preview' = {
       activeRevisionsMode: 'Single'
     }
     template: {
-      scale: {
+      scale: { // When compared to Scale-to-Zero, we just statically set the values here.
         minReplicas: numberOfAgents
         maxReplicas: numberOfAgents
       }
