@@ -1,6 +1,15 @@
 param registryName string
 param roleId string
 param principalId string
+@allowed(
+  [
+    'ServicePrincipal'
+    'Group'
+    'ForeignGroup'
+    'User'
+  ]
+)
+param principalType string = 'ServicePrincipal'
 
 // Get a reference to the existing registry
 resource registry 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' existing = {
@@ -14,6 +23,6 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-prev
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleId)
     principalId: principalId
-    principalType: 'ServicePrincipal'
+    principalType: principalType
   }
 }
