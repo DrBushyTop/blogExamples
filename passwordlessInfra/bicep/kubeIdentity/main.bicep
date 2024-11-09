@@ -5,7 +5,9 @@ extension microsoftGraphV1_0
 @description('The created service principal will be given permissions to this key vault. Your identity will need to have required permissions.')
 param keyVaultResourceId string
 
+@description('The issuer of the federation. In this demo, format should be https://SOMEACCOUNT.blob.core.windows.net/SOMECONTAINER/')
 param issuer string
+@description('The subject of the federation. In this demo, format should be system:serviceaccount:SERVICE_ACCOUNT_NAMESPACE:SERVICE_ACCOUNT_NAME')
 param subject string
 
 resource appReg 'Microsoft.Graph/applications@v1.0' = {
@@ -34,15 +36,24 @@ resource appRegSp 'Microsoft.Graph/servicePrincipals@v1.0' = {
 }
 
 resource federation 'Microsoft.Graph/applications/federatedIdentityCredentials@v1.0' = {
-  name: 'KubeFederation'
-  parent: appReg
-  properties: {
-    issuer: // TODO
-    subject: // TODO
-    audiences: [
-      'api://AzureADTokenExchange'
-    ]
+  name: 'phcloudbrewkubeid/KubeFederation'
+  issuer: issuer
+  subject: subject
+  audiences: [
+    'api://AzureADTokenExchange'
+  ]
+}
+
+var keyVaultName = last(split(keyVaultResourceId, '/'))
+var keyVaultResourceGroup = split(keyVaultResourceId, '/')[4]
+module keyVaultUser '../application/modules/keyvaultUser.bicep' = {
+  name: 'keyVaultUser-phcloudbrewkubeid'
+  params: {
+    keyVaultName: keyVaultName
+    identityPrincipalId: appRegSp.id
+    role: 'Key Vault Secrets User'
   }
+  scope: resourceGroup(keyVaultResourceGroup)
 }
 
 output clientId string = appReg.id
