@@ -1,5 +1,5 @@
 // TODO: Ehkä datalaken palomuuri kiinni ja vaan DI resurssina pääsee sisään?
-// VNET, VM, tagilla jotain sisään. RDP auki. 
+// VNET, VM, tagilla jotain sisään. SSH auki, HTTPS auki? Jos tää VM vaikka ajais kubeklusteria minikubessa. Toinen storage tälle?
 // App Service SQLiin oikeudet
 
 param namingPrefix string = 'phcloudbrew'

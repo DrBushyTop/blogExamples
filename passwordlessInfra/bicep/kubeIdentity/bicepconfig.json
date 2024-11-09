@@ -1,0 +1,69 @@
+{
+    "experimentalFeaturesEnabled": {
+        "extensibility": true
+    },
+    "extensions": {
+        "microsoftGraphV1_0": "br:mcr.microsoft.com/bicep/extensions/microsoftgraph/v1.0:0.1.8-preview"
+    },
+    "analyzers": {
+        "core": {
+            "enabled": true,
+            "rules": {
+                "adminusername-should-not-be-literal": {
+                    "level": "warning"
+                },
+                "explicit-values-for-loc-params": {
+                    "level": "warning"
+                },
+                "no-hardcoded-env-urls": {
+                    "level": "warning"
+                },
+                "no-hardcoded-location": {
+                    "level": "warning"
+                },
+                "no-unnecessary-dependson": {
+                    "level": "warning"
+                },
+                "no-loc-expr-outside-params": {
+                    "level": "warning"
+                },
+                "no-unused-params": {
+                    "level": "warning"
+                },
+                "no-unused-vars": {
+                    "level": "warning"
+                },
+                "outputs-should-not-contain-secrets": {
+                    "level": "warning"
+                },
+                "prefer-interpolation": {
+                    "level": "warning"
+                },
+                "secure-parameter-default": {
+                    "level": "warning"
+                },
+                "simplify-interpolation": {
+                    "level": "warning"
+                },
+                "protect-commandtoexecute-secrets": {
+                    "level": "warning"
+                },
+                "use-stable-vm-image": {
+                    "level": "warning"
+                },
+                "max-variables": {
+                    "level": "error"
+                },
+                "max-params": {
+                    "level": "error"
+                },
+                "max-outputs": {
+                    "level": "error"
+                },
+                "max-resources": {
+                    "level": "error"
+                }
+            }
+        }
+    }
+}
