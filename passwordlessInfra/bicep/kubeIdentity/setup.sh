@@ -70,8 +70,8 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 # Set Azure variables (replace these with your actual values)
 echo "Setting Azure environment variables..."
-export AZURE_STORAGE_ACCOUNT="your_storage_account_name"
-export AZURE_STORAGE_CONTAINER="your_storage_container_name"
+export AZURE_STORAGE_ACCOUNT="phcloudbrewoidc"
+export AZURE_STORAGE_CONTAINER="oidc"
 export AZURE_TENANT_ID="your_azure_tenant_id"
 export AZURE_SUBSCRIPTION_ID="your_subscription_id"
 export AAD_APPLICATION_ID="your_aad_application_id"
@@ -82,11 +82,23 @@ export LOCATION="swedencentral"
 echo "Logging into Azure..."
 az login --tenant $AZURE_TENANT_ID --use-device-code
 
-# Create resource group and storage account if they don't exist
-echo "Creating resource group and storage account..."
-az group create --name $RESOURCE_GROUP_NAME --location $LOCATION
-az storage account create --name $AZURE_STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP_NAME --location $LOCATION --sku Standard_LRS
+# Create resource group if it doesn't exist
+echo "Checking if resource group exists..."
+if [ $(az group exists --name $RESOURCE_GROUP_NAME) = false ]; then
+    echo "Creating resource group $RESOURCE_GROUP_NAME..."
+    az group create --name $RESOURCE_GROUP_NAME --location $LOCATION
+else
+    echo "Resource group $RESOURCE_GROUP_NAME already exists."
+fi
 
+# Check if storage account exists
+echo "Checking if storage account exists..."
+if ! az storage account check-name --name $AZURE_STORAGE_ACCOUNT --query "nameAvailable" --output tsv; then
+    echo "Storage account $AZURE_STORAGE_ACCOUNT already exists."
+else
+    echo "Creating storage account $AZURE_STORAGE_ACCOUNT..."
+    az storage account create --name $AZURE_STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP_NAME --location $LOCATION --sku Standard_LRS
+fi
 # Get storage account key
 echo "Retrieving storage account key..."
 export AZURE_STORAGE_KEY=$(az storage account keys list --account-name $AZURE_STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP_NAME --query "[0].value" -o tsv)
