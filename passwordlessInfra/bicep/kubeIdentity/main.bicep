@@ -5,6 +5,9 @@ extension microsoftGraphV1_0
 @description('The created service principal will be given permissions to this key vault. Your identity will need to have required permissions.')
 param keyVaultResourceId string
 
+param issuer string
+param subject string
+
 resource appReg 'Microsoft.Graph/applications@v1.0' = {
   displayName: 'phcloudbrewkubeid'
   uniqueName: 'phcloudbrewkubeid'

@@ -27,6 +27,9 @@
 # Handle Secrets Securely:
 # Ensure that any client secrets or certificates associated with the Azure AD application are handled securely in your environment.
 
+# Running the script:
+# chmod +x setup_minikube_oidc.sh
+# ./setup_minikube_oidc.sh
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -201,5 +204,17 @@ azwi serviceaccount add \
   --tenant-id $AZURE_TENANT_ID
 
 echo "Service Account creation complete!"
+
+echo ""
+echo "----------------------------------------"
+echo "Federated Identity Configuration Details"
+echo "----------------------------------------"
+echo "Issuer URL:"
+echo "https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${AZURE_STORAGE_CONTAINER}/"
+echo ""
+echo "Subject Identifier:"
+echo "system:serviceaccount:${SERVICE_ACCOUNT_NAMESPACE}:${SERVICE_ACCOUNT_NAME}"
+echo "----------------------------------------"
+echo ""
 
 echo "Installation and configuration complete!"
