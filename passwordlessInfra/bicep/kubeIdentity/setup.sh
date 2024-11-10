@@ -63,8 +63,8 @@ rm minikube
 
 # Generate RSA keys
 echo "Generating RSA keys..."
-openssl genrsa -out sa.key 2048
-openssl rsa -in sa.key -pubout -out sa.pub
+openssl genrsa -out /home/$USER/sa.key 2048
+openssl rsa -in/home/$USER/sa.key -pubout -out /home/$USER/sa.pub
 
 # Install Azure CLI
 echo "Installing Azure CLI..."
@@ -144,7 +144,7 @@ curl -s "https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${AZURE_STORAGE_
 
 # Install azwi (Azure Workload Identity)
 echo "Installing azwi..."
-curl -L https://github.com/Azure/azure-workload-identity/releases/download/v0.14.0/azwi_v0.14.0_linux_amd64.tar.gz | tar -xz
+curl -L https://github.com/Azure/azure-workload-identity/releases/download/v1.3.0/azwi-v1.3.0-linux-amd64.tar.gz | tar -xz
 sudo mv azwi /usr/local/bin/
 
 # Generate JWKS document
@@ -167,7 +167,8 @@ curl -s "https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${AZURE_STORAGE_
 
 # Start Minikube with required configurations
 echo "Starting Minikube with required configurations..."
-minikube start --extra-config=apiserver.service-account-issuer="https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${AZURE_STORAGE_CONTAINER}/" \
+sudo usermod -aG docker $USER && newgrp docker
+minikube start --extra-config=apiserver.service-account-issuer="https://$AZURE_STORAGE_ACCOUNT.blob.core.windows.net/$AZURE_STORAGE_CONTAINER/" \
                --extra-config=apiserver.service-account-signing-key-file="/home/$USER/sa.key" \
                --extra-config=apiserver.service-account-key-file="/home/$USER/sa.pub" \
                --extra-config=controller-manager.service-account-private-key-file="/home/$USER/sa.key"
