@@ -63,7 +63,7 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2024-03-01' = {
   name: '${vmName}-publicip'
   location: location
   properties: {
-    publicIPAllocationMethod: 'Dynamic'
+    publicIPAllocationMethod: 'Static'
   }
 }
 
