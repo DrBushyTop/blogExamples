@@ -168,7 +168,7 @@ curl -s "https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${AZURE_STORAGE_
 # Start Minikube with required configurations
 echo "Starting Minikube with required configurations..."
 sudo usermod -aG docker $USER && newgrp docker
-minikube start --extra-config=apiserver.service-account-issuer="https://$AZURE_STORAGE_ACCOUNT.blob.core.windows.net/$AZURE_STORAGE_CONTAINER/" \
+minikube start --extra-config=apiserver.service-account-issuer="https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${AZURE_STORAGE_CONTAINER}/" \
                --extra-config=apiserver.service-account-signing-key-file="/home/$USER/sa.key" \
                --extra-config=apiserver.service-account-key-file="/home/$USER/sa.pub" \
                --extra-config=controller-manager.service-account-private-key-file="/home/$USER/sa.key"
