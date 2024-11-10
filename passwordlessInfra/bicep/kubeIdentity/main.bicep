@@ -64,19 +64,3 @@ output clientId string = appReg.appId
 output objectId string = appReg.id
 output tenantId string = tenant().tenantId
 output audience string = appReg.signInAudience
-
-var kubeConfigMap = '''
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: identity
-  namespace: cloudbrewapp
-data:
-  AZURE_TENANT_ID: REPLACE_TENANT_ID
-  AZURE_CLIENT_ID: REPLACE_CLIENT_ID
-'''
-output kubeConfigMap string = replace(
-  replace(kubeConfigMap, 'REPLACE_TENANT_ID', tenant().tenantId),
-  'REPLACE_CLIENT_ID',
-  appReg.id
-)

@@ -79,6 +79,8 @@ export AZURE_SUBSCRIPTION_ID="ede0939c-80c4-4dfe-bf3d-84521f3f6d1f"
 export AAD_APPLICATION_ID="3f308513-c3f1-453c-9bfe-45d455762a8b"
 export RESOURCE_GROUP_NAME="oidc-resource-group"
 export LOCATION="swedencentral"
+export SERVICE_ACCOUNT_NAMESPACE="phcloudbrew"
+export SERVICE_ACCOUNT_NAME="phcloudbrewapp"
 
 # Login to Azure
 echo "Logging into Azure..."
@@ -166,7 +168,7 @@ curl -s "https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${AZURE_STORAGE_
 
 # Start Minikube with required configurations
 echo "Starting Minikube to set up required configurations..."
-sudo usermod -aG docker $USER && newgrp docker
+sudo usermod -aG docker $USER
 
 minikube start
 minikube cp /home/$USER/sa.key /var/lib/minikube/certs/sa.key
@@ -201,10 +203,6 @@ helm install workload-identity-webhook azure-workload-identity/workload-identity
 # Create Service Account via azwi
 echo "Creating Service Account via azwi..."
 
-# Set variables for service account creation
-export SERVICE_ACCOUNT_NAMESPACE="phcloudbrew"
-export SERVICE_ACCOUNT_NAME="phcloudbrewapp"
-
 # Use azwi to create the Kubernetes Service Account and link it to the Azure AD application
 echo "Linking Kubernetes Service Account with Azure AD application using azwi..."
 kubectl create namespace $SERVICE_ACCOUNT_NAMESPACE
@@ -213,6 +211,8 @@ azwi sa create phase service-account\
   --service-account-namespace $SERVICE_ACCOUNT_NAMESPACE \
   --service-account-name $SERVICE_ACCOUNT_NAME \
   --aad-application-client-id $AAD_APPLICATION_ID 
+
+echo "Restarting cluster just in case, as previously mutating webhook ran with failures"
 
 echo "Service Account creation complete!"
 
