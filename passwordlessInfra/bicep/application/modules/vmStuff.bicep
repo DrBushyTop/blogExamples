@@ -137,3 +137,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2024-07-01' = {
     environment: 'AzureProduction'
   }
 }
+
+output vmName string = vm.name
+output vmAdminUsername string = vm.properties.osProfile.adminUsername
+output vmPublicIp string = publicIp.properties.ipAddress

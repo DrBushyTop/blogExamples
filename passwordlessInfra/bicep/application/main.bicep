@@ -106,3 +106,6 @@ module vmStuff 'modules/vmStuff.bicep' = if (sshPublicKey != '') {
     sshPublicKey: sshPublicKey
   }
 }
+
+output keyVaultResourceId string = keyvault.outputs.keyvaultId
+output vmPublicIp string = vmStuff.outputs.vmPublicIp

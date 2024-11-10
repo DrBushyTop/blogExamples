@@ -100,7 +100,7 @@ if ! az storage account check-name --name $AZURE_STORAGE_ACCOUNT --query "nameAv
     echo "Storage account $AZURE_STORAGE_ACCOUNT already exists."
 else
     echo "Creating storage account $AZURE_STORAGE_ACCOUNT..."
-    az storage account create --name $AZURE_STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP_NAME --location $LOCATION --sku Standard_LRS
+    az storage account create --name $AZURE_STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP_NAME --location $LOCATION --sku Standard_LRS --allow-blob-public-access true
 fi
 # Get storage account key
 echo "Retrieving storage account key..."
