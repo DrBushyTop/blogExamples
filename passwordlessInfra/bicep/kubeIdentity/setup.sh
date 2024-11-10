@@ -64,7 +64,7 @@ rm minikube
 # Generate RSA keys
 echo "Generating RSA keys..."
 openssl genrsa -out /home/$USER/sa.key 2048
-openssl rsa -in/home/$USER/sa.key -pubout -out /home/$USER/sa.pub
+openssl rsa -in /home/$USER/sa.key -pubout -out /home/$USER/sa.pub
 
 # Install Azure CLI
 echo "Installing Azure CLI..."
