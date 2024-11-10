@@ -5,6 +5,7 @@ extension microsoftGraphV1_0
 @description('The created service principal will be given permissions to this key vault. Your identity will need to have required permissions.')
 param keyVaultResourceId string
 
+#disable-next-line no-hardcoded-env-urls
 @description('The issuer of the federation. In this demo, format should be https://SOMEACCOUNT.blob.core.windows.net/SOMECONTAINER/')
 param issuer string
 @description('The subject of the federation. In this demo, format should be system:serviceaccount:SERVICE_ACCOUNT_NAMESPACE:SERVICE_ACCOUNT_NAME')

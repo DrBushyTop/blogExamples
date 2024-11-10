@@ -74,7 +74,7 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 # Set Azure variables (replace these with your actual values)
 echo "Setting Azure environment variables..."
 export AZURE_STORAGE_ACCOUNT="phcloudbrewoidc"
-export AZURE_STORAGE_CONTAINER="oidc"
+export AZURE_STORAGE_CONTAINER="oidccontainer"
 export AZURE_TENANT_ID="your_azure_tenant_id"
 export AZURE_SUBSCRIPTION_ID="your_subscription_id"
 export AAD_APPLICATION_ID="your_aad_application_id"

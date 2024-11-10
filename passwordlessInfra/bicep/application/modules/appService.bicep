@@ -30,7 +30,6 @@ resource api 'Microsoft.Web/sites@2023-12-01' = {
       use32BitWorkerProcess: false
       http20Enabled: true
       cors: {
-        supportCredentials: true
         allowedOrigins: [
           '*'
         ]

@@ -5,12 +5,15 @@
 param namingPrefix string = 'phcloudbrew'
 param location string = 'swedencentral'
 param adminGroupObjectId string //TODO
+@description('The SSH public key to use for the VM. If omitted, VM and relevant resources will not be deployed')
+param sshPublicKey string
 
 var naming = {
   law: '${namingPrefix}-law'
   appInsights: '${namingPrefix}-appinsights'
   keyVault: '${namingPrefix}kv'
   vm: '${namingPrefix}-vm'
+  vnet: '${namingPrefix}-vnet'
   storage: '${namingPrefix}stg'
   sqlServer: '${namingPrefix}-sql'
   sqlDatabase: '${namingPrefix}-sqldb'
@@ -47,7 +50,7 @@ module data 'modules/data.bicep' = {
     sqlServerName: naming.sqlServer
     sqlDatabaseName: naming.sqlDatabase
     location: location
-    keyVaultName: naming.keyVault
+    keyVaultName: keyvault.outputs.keyvaultName
     adminGroupObjectId: adminGroupObjectId
   }
 }
@@ -90,5 +93,16 @@ module serviceBus 'modules/serviceBusFunc.bicep' = {
 
     location: location
     adminGroupObjectId: adminGroupObjectId
+  }
+}
+
+module vmStuff 'modules/vmStuff.bicep' = if (sshPublicKey != '') {
+  name: 'vmStuff'
+  params: {
+    vmName: naming.vm
+    vnetName: naming.vnet
+    vnetAddressSpace: '10.89.1.0/24'
+    location: location
+    sshPublicKey: sshPublicKey
   }
 }
