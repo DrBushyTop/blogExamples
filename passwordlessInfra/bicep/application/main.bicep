@@ -60,7 +60,6 @@ module documentIntelligence 'modules/documentIntelligence.bicep' = {
   params: {
     documentIntelligenceName: naming.documentIntelligence
     location: location
-    logAnalyticsResourceId: telemetry.outputs.lawId
     adminGroupObjectId: adminGroupObjectId
     dataLakeResourceId: data.outputs.dataLakeId
   }
