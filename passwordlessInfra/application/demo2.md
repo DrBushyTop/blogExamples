@@ -1,0 +1,5 @@
+- documentIntelligence.bicep - identity on the doc service, permissions to storage given to it
+- serviceBusFunc.bicep - user assigned id, sbus trigger auth, storage access app settings. Only some services support user assigned.
+- Show datalake permissions, func has no access
+  - Call function, get results
+  - Show documentintelligence portal

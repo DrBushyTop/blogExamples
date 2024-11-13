@@ -47,6 +47,19 @@ resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@
   location: location
 }
 
+resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: funcStorageAccountName
+  location: location
+  sku: {
+    name: 'Standard_ZRS'
+  }
+  kind: 'StorageV2'
+  properties: {
+    accessTier: 'Hot'
+    supportsHttpsTrafficOnly: true
+  }
+}
+
 resource function 'Microsoft.Web/sites@2023-12-01' = {
   name: funcAppName
   location: location
