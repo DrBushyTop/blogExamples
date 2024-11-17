@@ -196,9 +196,9 @@ helm repo update
 # Install workload-identity-webhook via Helm
 echo "Installing workload-identity-webhook..."
 helm install workload-identity-webhook azure-workload-identity/workload-identity-webhook \
-   --namespace azure-workload-identity-system \
-   --create-namespace \
-   --set azureTenantID="${AZURE_TENANT_ID}"
+  --namespace azure-workload-identity-system \
+  --create-namespace \
+  --set azureTenantID="${AZURE_TENANT_ID}"
 
 # Create Service Account via azwi
 echo "Creating Service Account via azwi..."

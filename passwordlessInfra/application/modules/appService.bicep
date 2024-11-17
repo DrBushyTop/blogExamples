@@ -71,7 +71,7 @@ resource api_appSettings 'Microsoft.Web/sites/config@2023-12-01' = {
 
 // Could just set the permission on the specific secret too if we wanted to be even more secure
 module kvPermissions 'keyvaultUser.bicep' = {
-  name: 'kvPermissions'
+  name: 'kvPermissions-api'
   params: {
     keyVaultName: keyVaultName
     identityPrincipalId: api.identity.principalId

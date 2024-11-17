@@ -117,7 +117,7 @@ module funcSbusOwner 'serviceBusUser.bicep' = {
 }
 
 module funcKvUser 'keyvaultUser.bicep' = {
-  name: 'kvPermissions'
+  name: 'kvPermissions-funckv'
   params: {
     keyVaultName: keyVaultName
     identityPrincipalId: userAssignedIdentity.properties.principalId
