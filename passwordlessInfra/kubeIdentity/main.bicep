@@ -33,7 +33,7 @@ resource appReg 'Microsoft.Graph/applications@v1.0' = {
 }
 
 resource appRegSp 'Microsoft.Graph/servicePrincipals@v1.0' = {
-  appId: appReg.id
+  appId: appReg.appId
 }
 
 resource federation 'Microsoft.Graph/applications/federatedIdentityCredentials@v1.0' = {
@@ -42,6 +42,9 @@ resource federation 'Microsoft.Graph/applications/federatedIdentityCredentials@v
   subject: subject
   audiences: [
     'api://AzureADTokenExchange'
+  ]
+  dependsOn: [
+    appReg
   ]
 }
 
@@ -57,22 +60,7 @@ module keyVaultUser '../application/modules/keyvaultUser.bicep' = {
   scope: resourceGroup(keyVaultResourceGroup)
 }
 
-output clientId string = appReg.id
+output clientId string = appReg.appId
+output objectId string = appReg.id
 output tenantId string = tenant().tenantId
 output audience string = appReg.signInAudience
-
-var kubeConfigMap = '''
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: identity
-  namespace: cloudbrewapp
-data:
-  AZURE_TENANT_ID: REPLACE_TENANT_ID
-  AZURE_CLIENT_ID: REPLACE_CLIENT_ID
-'''
-output kubeConfigMap string = replace(
-  replace(kubeConfigMap, 'REPLACE_TENANT_ID', tenant().tenantId),
-  'REPLACE_CLIENT_ID',
-  appReg.id
-)

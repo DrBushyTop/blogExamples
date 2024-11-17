@@ -1,1 +1,0 @@
-// Service principal setup

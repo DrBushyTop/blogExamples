@@ -6,8 +6,6 @@ param dataLakeResourceId string
 
 param adminGroupObjectId string
 
-param logAnalyticsResourceId string
-
 resource documentIntelligence 'Microsoft.CognitiveServices/accounts@2022-03-01' = {
   name: documentIntelligenceName
   location: location
@@ -45,20 +43,6 @@ module documentIntelligenceUser_developers 'documentIntelligenceUser.bicep' = {
     documentIntelligenceName: documentIntelligenceName
     role: 'Cognitive Services User'
     principalType: 'Group'
-  }
-}
-
-resource documentIntelligenceUser_diagnosticsSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'auditToLogAnalytics'
-  scope: documentIntelligence
-  properties: {
-    workspaceId: logAnalyticsResourceId
-    logs: [
-      {
-        category: 'Audit'
-        enabled: true
-      }
-    ]
   }
 }
 

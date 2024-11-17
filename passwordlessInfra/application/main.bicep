@@ -1,6 +1,7 @@
 // TODO: Ehkä datalaken palomuuri kiinni ja vaan DI resurssina pääsee sisään?
 // VNET, VM, tagilla jotain sisään. SSH auki, HTTPS auki? Jos tää VM vaikka ajais kubeklusteria minikubessa. Toinen storage tälle?
 // App Service SQLiin oikeudet
+// TODO: App servicelle storage oikeudet
 
 param namingPrefix string = 'phcloudbrew'
 param location string = 'swedencentral'
@@ -22,6 +23,7 @@ var naming = {
   documentIntelligence: '${namingPrefix}-di'
   serviceBus: '${namingPrefix}-sbus'
   functionApp: '${namingPrefix}-func'
+  functionStorage: '${namingPrefix}fustg'
   functionIdentity: '${namingPrefix}-func-id'
 }
 
@@ -60,7 +62,6 @@ module documentIntelligence 'modules/documentIntelligence.bicep' = {
   params: {
     documentIntelligenceName: naming.documentIntelligence
     location: location
-    logAnalyticsResourceId: telemetry.outputs.lawId
     adminGroupObjectId: adminGroupObjectId
     dataLakeResourceId: data.outputs.dataLakeId
   }
@@ -85,7 +86,7 @@ module serviceBus 'modules/serviceBusFunc.bicep' = {
     serviceBusName: naming.serviceBus
 
     funcAppName: naming.functionApp
-    funcStorageAccountName: data.outputs.dataLakeName
+    funcStorageAccountName: naming.functionStorage
     funcUserAssignedIdentityName: naming.functionIdentity
     aiCstringKeyVaultRef: telemetry.outputs.appInsightsCstringKeyVaultRef
     appServicePlanId: appService.outputs.appServicePlanId
@@ -106,3 +107,6 @@ module vmStuff 'modules/vmStuff.bicep' = if (sshPublicKey != '') {
     sshPublicKey: sshPublicKey
   }
 }
+
+output keyVaultResourceId string = keyvault.outputs.keyvaultId
+output vmPublicIp string = vmStuff.outputs.vmPublicIp
