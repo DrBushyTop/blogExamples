@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# This script configures a self hosted kubernetes cluster with workload identity using Azure AD.
+# These commands configures a self hosted kubernetes cluster with workload identity using Entra ID.
+# The file might not work directly as a script, but can be used as a reference to configure your own cluster.
 
 # Replace the following variables with your actual values:
 # export AZURE_STORAGE_ACCOUNT="your_storage_account_name"
@@ -213,6 +214,8 @@ azwi sa create phase service-account\
   --aad-application-client-id $AAD_APPLICATION_ID 
 
 echo "Restarting cluster just in case, as previously mutating webhook ran with failures"
+minikube stop
+minikube start
 
 echo "Service Account creation complete!"
 

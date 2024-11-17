@@ -1,6 +1,8 @@
+- show appservice in portal, identity tab
+- appService.bicep - Identity setup, giving permissions, env variables
 - data.bicep - SQL Server AAD only, Cstring, Storage. Outputs, KV
-- appService.bicep - Identity setup, giving permissions
-  - Log into App Service to show identity, env variables
+
+- Log into App Service to show identity, env variables
 
 ```powershell
 ## Get relevant env variables
@@ -24,6 +26,27 @@ Write-Output $accessToken
 ```
 
 - show portal managed identity menu
+
+- Permissions to SQL
+
+```sql
+CREATE USER [phcloudbrew-appservice] FROM EXTERNAL PROVIDER;
+ALTER ROLE db_datareader ADD MEMBER [phcloudbrew-appservice];
+
+-- List users
+SELECT name, type_desc, authentication_type_desc FROM sys.database_principals WHERE name = 'phcloudbrew-appservice';
+
+-- List roles for user
+SELECT name, type_desc FROM sys.database_principals WHERE type = 'R'
+AND principal_id IN
+	(SELECT role_principal_id FROM sys.database_role_members WHERE member_principal_id = USER_ID('phcloudbrew-appservice'));
+
+-- Delete user
+DROP USER [phcloudbrew-appservice];
+GO
+```
+
+## Extra
 
 - vmStuff.bicep - VM tagging, log into VM to show metadata and auth endpoints, tags
 
