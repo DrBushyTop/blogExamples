@@ -1,5 +1,8 @@
 export KEYVAULT_SECRET_NAME="hellosecret"
 export KEYVAULT_URL="https://phcloudbrewkv.vault.azure.net/"
+export SERVICE_ACCOUNT_NAME="phcloudbrewapp"
+export SERVICE_ACCOUNT_NAMESPACE="phcloudbrew"
+
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
