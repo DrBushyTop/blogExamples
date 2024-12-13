@@ -7,7 +7,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: quick-start
+  name: secret-getter
   namespace: ${SERVICE_ACCOUNT_NAMESPACE}
   labels:
     azure.workload.identity/use: "true"

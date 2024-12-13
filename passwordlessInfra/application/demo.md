@@ -46,6 +46,9 @@ DROP USER [phcloudbrew-appservice];
 GO
 ```
 
+- documentIntelligence.bicep - identity on the doc service, permissions to storage given to it
+- serviceBusFunc.bicep - user assigned id, sbus trigger auth, storage access app settings. Only some services support user assigned.
+
 ## Extra
 
 - vmStuff.bicep - VM tagging, log into VM to show metadata and auth endpoints, tags

@@ -99,10 +99,10 @@ resource appSettings 'Microsoft.Web/sites/config@2023-12-01' = {
 
     // Needed as we only have a user assigned identity
     AzureWebJobsStorage__credential: 'managedIdentity'
-    AzureWebJobsStorage__clientId: userAssignedIdentity.properties.principalId
-    ServiceBusConnection__clientId: userAssignedIdentity.properties.principalId // These are important for continued functionality. Without them it might look like the function is pulling items, but it only stays awake for a while and then stops working until you visit the portal or run the sync again
+    AzureWebJobsStorage__clientId: userAssignedIdentity.properties.clientId
+    ServiceBusConnection__clientId: userAssignedIdentity.properties.clientId // These are important for continued functionality. Without them it might look like the function is pulling items, but it only stays awake for a while and then stops working until you visit the portal or run the sync again
     ServiceBusConnection__credential: 'managedIdentity'
-    AZURE_CLIENT_ID: userAssignedIdentity.properties.principalId // This is for DefaultAzureCredential and the like to not have to specify ID in code
+    AZURE_CLIENT_ID: userAssignedIdentity.properties.clientId // This is for DefaultAzureCredential and the like to not have to specify ID in code
   }
 }
 
