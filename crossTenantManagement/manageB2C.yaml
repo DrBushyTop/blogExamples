@@ -1,0 +1,69 @@
+trigger: none
+
+jobs:
+  - job: "B2C_Management"
+
+    variables:
+      - name: "B2CTenantId"
+        value: "your-b2c-tenant-id"
+      - name: "B2CApplicationId"
+        value: "your-b2c-application-id"
+      - name: monitoringSubId
+        value: "your-monitoring-sub-id"
+
+    displayName: "B2C Management"
+    pool:
+      vmImage: "windows-latest"
+    steps:
+      - checkout: self
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: "AzureB2CServiceConnection"
+          scriptType: pscore
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            # Set up required function
+            function Get-AADClientAssertionToken {
+              param (
+                  [Parameter(Mandatory = $true)]
+                  [string]$TenantId,
+
+                  [Parameter(Mandatory = $true)]
+                  [string]$ClientId,
+
+                  [Parameter(Mandatory = $true)]
+                  [string]$ClientAssertion
+              )
+
+              $tokenEndpoint = "https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token"
+
+              $body = @{
+                  scope                   = "https://graph.microsoft.com/.default"
+                  client_id               = $ClientId
+                  client_assertion_type   = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+                  client_assertion        = $ClientAssertion
+                  grant_type              = "client_credentials"
+              }
+
+              try {
+                  $response = Invoke-RestMethod -Uri $tokenEndpoint `
+                                                -Method POST `
+                                                -ContentType "application/x-www-form-urlencoded" `
+                                                -Body $body
+                  return $response
+              }
+              catch {
+                  Write-Error "Failed to acquire token: $_"
+                  throw $_
+              }
+            }
+
+            # Get the access token
+            $tokenResponse = Get-AADClientAssertionToken -TenantId $(B2CTenantId) -ClientId $(B2CApplicationId) -ClientAssertion $(B2CApplicationId) | ConvertFrom-Json
+            $token = $tokenResponse.access_token
+
+            # Log in using the token
+            az login --service-principal -u $env:servicePrincipalId --tenant $(B2CTenantId) --federated-token $token
+
+            # Run the bicep deployment
+            az deployment sub create --location westeurope --template-file crossTenantManagement/manageB2C.bicep --subscription $(monitoringSubId)

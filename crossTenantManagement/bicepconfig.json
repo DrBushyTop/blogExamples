@@ -1,0 +1,19 @@
+{
+    "analyzers": {
+        "core": {
+            "rules": {
+                "no-unused-params": {
+                    "level": "warning"
+                }
+            }
+        }
+    },
+    "experimentalFeaturesEnabled": {
+        "extensibility": true,
+        "resourceTypedParamsAndOutputs": true,
+        "resourceDerivedTypes": true
+    },
+    "extensions": {
+        "microsoftGraphV1": "br:mcr.microsoft.com/bicep/extensions/microsoftgraph/v1.0:0.1.9-preview"
+    }
+}
